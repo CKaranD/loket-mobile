@@ -5,7 +5,8 @@ Rebranded build of [chatwoot/chatwoot-mobile-app](https://github.com/chatwoot/ch
 
 ## Fork deltas (re-check these when merging `upstream/main`)
 - `app.config.ts`: name `Loket`, package/bundle id `chat.rezeki.loket` (permanent once
-  published), scheme `loketapp`, deep-link host `loket.rezeki.chat`, no `owner`.
+  published), scheme `loketapp`, deep-link host `loket.rezeki.chat`, EAS `owner`
+  `bina-rezeki-trading` + `projectId` fallback (keep both — they tie builds to the EAS project).
 - Deep-link scheme `loketapp` also in `src/constants/index.ts`, `src/utils/ssoUtils.ts`,
   `src/navigation/index.tsx`.
 - Default server URL `loket.rezeki.chat` in `src/store/settings/settingsSlice.ts`.
@@ -23,3 +24,10 @@ Needs our own Firebase project (`google-services.json` via
 `FIREBASE_CREDENTIALS` on the Chatwoot server. Setting those switches the server
 off Chatwoot's push relay for EVERY device, so the official Chatwoot app stops
 getting pushes — only flip it once all staff use this app.
+
+## App links (conversation URLs opening in the app)
+`autoVerify` App Links need the Chatwoot server's `/.well-known/assetlinks.json` to name
+this app. It is currently EMPTY (`package_name: ""`), so conversation links open in the
+browser. To enable: set `ANDROID_BUNDLE_ID=chat.rezeki.loket` and
+`ANDROID_SHA256_CERT_FINGERPRINT=<SHA-256 of the EAS keystore>` in the Chatwoot `.env`
+on the VM, then restart rails. (iOS: `IOS_APP_ID` once there's an Apple team.)
