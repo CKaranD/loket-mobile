@@ -11,6 +11,8 @@ Rebranded build of [chatwoot/chatwoot-mobile-app](https://github.com/chatwoot/ch
 - Default server URL `loket.rezeki.chat` in `src/store/settings/settingsSlice.ts`.
 - Icons/splash/login logo: `assets/{icon,adaptive-icon,splash}.png`,
   `src/assets/{images,local}/logo.png` (Loket locket on #2563EB).
+- Chat auto-scrolls to new messages: `message-list/useAutoScrollToLatest.ts` (drop it if
+  upstream fixes FlashList's `autoscrollToTopThreshold`).
 
 ## Updating from upstream
     git fetch upstream && git merge upstream/main   # resolve conflicts in the files above
