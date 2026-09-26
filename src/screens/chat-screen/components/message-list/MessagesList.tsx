@@ -7,7 +7,6 @@ import { tailwind } from '@/theme';
 import { Message } from '@/types';
 import { MessageComponent } from '../message-item/Message';
 import { useRefsContext } from '@/context';
-import { useAutoScrollToLatest } from './useAutoScrollToLatest';
 
 export type FlashListRenderProps = {
   item: { date: string } | Message;
@@ -61,7 +60,6 @@ export const MessagesList = ({
   const typedMessageListRef = messageListRef as React.RefObject<
     FlashListRef<Message | { date: string }>
   >;
-  const { onScroll } = useAutoScrollToLatest(messages, typedMessageListRef, !isSearchNavigation);
 
   const handleRender = ({ item, index }: { item: Message | { date: string }; index: number }) => {
     if ('date' in item) {
@@ -100,7 +98,6 @@ export const MessagesList = ({
             setFlashListReady(true);
           }
         }}
-        onScroll={onScroll}
         onScrollBeginDrag={() => {
           // Normal chat becomes ready on the first user drag, which gates pagination.
           if (!isSearchNavigation && !isFlashListReady) {
@@ -111,6 +108,11 @@ export const MessagesList = ({
         // Data is newest-first, so inverted renders index 0 at the visual bottom.
         // Older history loads via onEndReached, newer via onStartReached.
         inverted
+        // FlashList pins the viewport when an item is prepended, which hides an
+        // incoming message below the fold and re-applies after any scroll we
+        // issue. A plain inverted list already shows new messages at the bottom,
+        // so only keep pinning for search navigation, which prepends newer pages.
+        maintainVisibleContentPosition={{ disabled: !isSearchNavigation }}
         getItemType={item => ('date' in item ? 'date' : 'message')}
         drawDistance={500}
         showsVerticalScrollIndicator={false}
