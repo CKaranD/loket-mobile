@@ -7,6 +7,7 @@ import { tailwind } from '@/theme';
 import { Message } from '@/types';
 import { MessageComponent } from '../message-item/Message';
 import { useRefsContext } from '@/context';
+import { useAutoScrollToLatest } from './useAutoScrollToLatest';
 
 export type FlashListRenderProps = {
   item: { date: string } | Message;
@@ -60,6 +61,7 @@ export const MessagesList = ({
   const typedMessageListRef = messageListRef as React.RefObject<
     FlashListRef<Message | { date: string }>
   >;
+  const { onScroll } = useAutoScrollToLatest(messages, typedMessageListRef, !isSearchNavigation);
 
   const handleRender = ({ item, index }: { item: Message | { date: string }; index: number }) => {
     if ('date' in item) {
@@ -98,6 +100,7 @@ export const MessagesList = ({
             setFlashListReady(true);
           }
         }}
+        onScroll={onScroll}
         onScrollBeginDrag={() => {
           // Normal chat becomes ready on the first user drag, which gates pagination.
           if (!isSearchNavigation && !isFlashListReady) {
