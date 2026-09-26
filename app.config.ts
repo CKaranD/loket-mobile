@@ -63,9 +63,10 @@ export default ({ config }: ConfigContext): ExpoConfig => {
         },
       ],
     },
+    owner: 'bina-rezeki-trading',
     extra: {
       eas: {
-        projectId: process.env.EXPO_PUBLIC_PROJECT_ID,
+        projectId: process.env.EXPO_PUBLIC_PROJECT_ID || 'e2755bc1-196c-46d9-b0a8-ea92e1d6a062',
         storybookEnabled: process.env.EXPO_STORYBOOK_ENABLED,
       },
     },
